@@ -1,0 +1,258 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { QRConfig } from '../../types/qr';
+import { Move, Image as ImageIcon, Upload, X, Loader2, AlertCircle, Maximize } from 'lucide-react';
+import { uploadQRImage } from '../../services/storageService';
+import { useAuth } from '../auth/AuthProvider';
+import { UploadTask } from 'firebase/storage';
+
+interface ImageOptionsProps {
+  config: QRConfig;
+  onChange: (newConfig: QRConfig) => void;
+}
+
+export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) => {
+  const { user, signIn } = useAuth();
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
+  const uploadTaskRef = useRef<UploadTask | null>(null);
+
+  // Cleanup local preview URL to avoid memory leaks
+  useEffect(() => {
+    return () => {
+      if (localPreview) URL.revokeObjectURL(localPreview);
+      if (uploadTaskRef.current) uploadTaskRef.current.cancel();
+    };
+  }, [localPreview]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!user) {
+      signIn();
+      return;
+    }
+
+    // 1. Create local preview immediately
+    const previewUrl = URL.createObjectURL(file);
+    setLocalPreview(previewUrl);
+    
+    // Apply local preview to QR config so user sees it instantly
+    onChange({
+      ...config,
+      image: previewUrl
+    });
+
+    setError(null);
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      // 2. Start upload in background
+      const { promise, task } = uploadQRImage(file, (progress) => {
+        setUploadProgress(Math.round(progress));
+      });
+      
+      uploadTaskRef.current = task;
+      const permanentUrl = await promise;
+
+      // 3. Update with permanent URL once finished
+      onChange({
+        ...config,
+        image: permanentUrl
+      });
+      setLocalPreview(null); // Clear local preview state as we have the real URL now
+    } catch (err: any) {
+      if (err.code === 'storage/canceled') {
+        console.log('Upload canceled by user');
+        return;
+      }
+      
+      console.error('Upload failed:', err);
+      let message = 'Erro ao fazer upload. Verifique se o Storage está ativado e as regras de CORS configuradas.';
+      
+      if (err.code === 'storage/unauthorized') {
+        message = 'Sem permissão. Verifique as regras de segurança do Storage.';
+      } else if (err.code === 'storage/retry-limit-exceeded') {
+        message = 'Tempo limite excedido. Verifique sua conexão ou as configurações de CORS do Firebase.';
+      } else if (err.code === 'storage/unknown') {
+        message = 'Erro desconhecido. Isso geralmente indica falta de configuração de CORS no bucket.';
+      }
+      
+      setError(message);
+    } finally {
+      setIsUploading(false);
+      uploadTaskRef.current = null;
+    }
+  };
+
+  const cancelUpload = () => {
+    if (uploadTaskRef.current) {
+      uploadTaskRef.current.cancel();
+    }
+    removeImage();
+  };
+
+  const removeImage = () => {
+    onChange({
+      ...config,
+      image: null
+    });
+    setLocalPreview(null);
+    setError(null);
+    setIsUploading(false);
+    setUploadProgress(0);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-3">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+          <ImageIcon size={16} className="text-gray-400" />
+          Logo Image
+        </label>
+        
+        {config.image ? (
+          <div className="relative group w-32 h-32 mx-auto">
+            <img 
+              src={config.image} 
+              alt="QR Logo" 
+              className="w-full h-full object-contain border border-gray-200 rounded-lg p-2 bg-gray-50"
+              referrerPolicy="no-referrer"
+            />
+            {isUploading && (
+              <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center backdrop-blur-[1px]">
+                <div className="relative w-10 h-10 mb-1">
+                  <Loader2 size={40} className="text-white animate-spin opacity-80" />
+                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white">
+                    {uploadProgress}%
+                  </div>
+                </div>
+                <button 
+                  onClick={cancelUpload}
+                  className="text-[10px] text-white bg-red-500/80 px-2 py-0.5 rounded hover:bg-red-600 transition-colors font-bold"
+                >
+                  CANCELAR
+                </button>
+              </div>
+            )}
+            {!isUploading && (
+              <button 
+                onClick={removeImage}
+                className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 transition-colors z-10"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 bg-gray-50 hover:bg-gray-100 transition-all cursor-pointer relative min-h-[160px]">
+            <input 
+              type="file" 
+              accept="image/*"
+              onChange={handleFileChange}
+              className="absolute inset-0 opacity-0 cursor-pointer"
+              disabled={isUploading}
+            />
+            {isUploading ? (
+              <div className="flex flex-col items-center">
+                <div className="relative w-12 h-12 mb-2">
+                  <Loader2 size={48} className="text-blue-500 animate-spin" />
+                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-blue-600">
+                    {uploadProgress}%
+                  </div>
+                </div>
+                <p className="text-xs text-blue-500 font-medium mb-2">Enviando imagem...</p>
+                <button 
+                  onClick={cancelUpload}
+                  className="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-[10px] font-bold hover:bg-gray-300 transition-colors"
+                >
+                  CANCELAR
+                </button>
+              </div>
+            ) : (
+              <>
+                <Upload size={32} className="text-gray-400 mb-2" />
+                <p className="text-xs text-gray-500 font-medium">Clique ou arraste para enviar</p>
+                {!user && <p className="text-[10px] text-blue-500 mt-2 font-bold uppercase tracking-wider">Login necessário</p>}
+              </>
+            )}
+          </div>
+        )}
+
+        {error && (
+          <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-100 rounded-lg text-red-600 text-xs animate-in fade-in slide-in-from-top-1">
+            <AlertCircle size={14} className="shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-bold">Erro no Upload</p>
+              <p>{error}</p>
+              <p className="mt-2 text-[10px] opacity-80">
+                Dica: Se o upload falhar mas a imagem aparecer no QR, você ainda pode baixar o QR code, mas não poderá salvar este estilo na nuvem com a imagem.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Maximize size={16} className="text-gray-400" />
+              Image Size
+            </label>
+            <span className="text-xs font-mono text-gray-400">{(config.imageOptions.imageSize * 100).toFixed(0)}%</span>
+          </div>
+          <input
+            type="range"
+            min="0.1"
+            max="1"
+            step="0.05"
+            value={config.imageOptions.imageSize}
+            onChange={(e) => onChange({
+              ...config,
+              imageOptions: { ...config.imageOptions, imageSize: Number(e.target.value) }
+            })}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <Move size={16} className="text-gray-400" />
+            Image Margin
+          </label>
+          <input
+            type="number"
+            value={config.imageOptions.margin}
+            onChange={(e) => onChange({
+              ...config,
+              imageOptions: { ...config.imageOptions, margin: Number(e.target.value) }
+            })}
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#333333] focus:border-transparent outline-none transition-all"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <ImageIcon size={16} className="text-gray-400" />
+            Cross Origin
+          </label>
+          <select
+            value={config.imageOptions.crossOrigin}
+            onChange={(e) => onChange({
+              ...config,
+              imageOptions: { ...config.imageOptions, crossOrigin: e.target.value }
+            })}
+            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#333333] focus:border-transparent outline-none transition-all"
+          >
+            <option value="anonymous">Anonymous</option>
+            <option value="use-credentials">Use Credentials</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};

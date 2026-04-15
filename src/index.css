@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@layer base {
+  /* High Contrast Mode */
+  .high-contrast {
+    filter: contrast(1.5) brightness(1.1);
+  }
+
+  .high-contrast body {
+    background-color: #000 !important;
+    color: #fff !important;
+  }
+
+  .high-contrast .bg-white {
+    background-color: #000 !important;
+    border-color: #fff !important;
+  }
+
+  .high-contrast .text-gray-700, 
+  .high-contrast .text-gray-600,
+  .high-contrast .text-gray-800 {
+    color: #fff !important;
+  }
+
+  /* Colorblind Filters */
+  .protanopia {
+    filter: url('#protanopia-filter');
+  }
+
+  .deuteranopia {
+    filter: url('#deuteranopia-filter');
+  }
+
+  .tritanopia {
+    filter: url('#tritanopia-filter');
+  }
+
+  .achromatopsia {
+    filter: grayscale(1);
+  }
+}
