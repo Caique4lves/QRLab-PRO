@@ -231,7 +231,7 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
               ...config,
               imageOptions: { ...config.imageOptions, margin: Number(e.target.value) }
             })}
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#333333] focus:border-transparent outline-none transition-all"
+            className="w-full px-4 py-2 glass-input rounded-lg outline-none transition-all"
           />
         </div>
 
@@ -246,7 +246,7 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
               ...config,
               imageOptions: { ...config.imageOptions, crossOrigin: e.target.value }
             })}
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#333333] focus:border-transparent outline-none transition-all"
+            className="w-full px-4 py-2 glass-input rounded-lg outline-none transition-all"
           >
             <option value="anonymous">Anonymous</option>
             <option value="use-credentials">Use Credentials</option>

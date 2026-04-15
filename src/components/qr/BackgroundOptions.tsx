@@ -32,7 +32,7 @@ export const BackgroundOptions: React.FC<BackgroundOptionsProps> = ({ config, on
               ...config,
               backgroundOptions: { ...config.backgroundOptions, color: e.target.value }
             })}
-            className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none"
+            className="flex-1 px-4 py-2 glass-input rounded-lg outline-none"
           />
         </div>
       </div>

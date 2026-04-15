@@ -72,10 +72,10 @@ export default function App() {
         <div className="w-full lg:w-[600px] space-y-2">
           
           {/* Main Options */}
-          <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+          <div className="glass-card rounded-2xl overflow-hidden">
             <button 
               onClick={() => toggleSection('main')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
             >
               <span>Main Options</span>
               {openSection === 'main' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -88,10 +88,10 @@ export default function App() {
           </div>
 
           {/* Dots Options */}
-          <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+          <div className="glass-card rounded-2xl overflow-hidden">
             <button 
               onClick={() => toggleSection('dots')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
             >
               <span>Dots Options</span>
               {openSection === 'dots' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -104,10 +104,10 @@ export default function App() {
           </div>
 
           {/* Corners Options */}
-          <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+          <div className="glass-card rounded-2xl overflow-hidden">
             <button 
               onClick={() => toggleSection('corners')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
             >
               <span>Corners Options</span>
               {openSection === 'corners' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -120,10 +120,10 @@ export default function App() {
           </div>
 
           {/* Background Options */}
-          <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+          <div className="glass-card rounded-2xl overflow-hidden">
             <button 
               onClick={() => toggleSection('background')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
             >
               <span>Background Options</span>
               {openSection === 'background' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -136,10 +136,10 @@ export default function App() {
           </div>
 
           {/* Image Options */}
-          <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+          <div className="glass-card rounded-2xl overflow-hidden">
             <button 
               onClick={() => toggleSection('image')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
             >
               <span>Image Options</span>
               {openSection === 'image' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -155,14 +155,14 @@ export default function App() {
           <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button 
               onClick={exportToJson}
-              className="flex items-center justify-center gap-2 px-6 py-4 border-2 border-[#333333] text-[#333333] rounded-lg font-bold hover:bg-gray-50 transition-all active:scale-[0.98]"
+              className="flex items-center justify-center gap-2 px-6 py-4 glass-card rounded-xl font-bold text-gray-700 hover:bg-white/50 transition-all active:scale-[0.98]"
             >
               <FileJson size={20} />
               Export JSON
             </button>
             <button 
               onClick={handleSaveToCloud}
-              className="flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-all shadow-md active:scale-[0.98]"
+              className="flex items-center justify-center gap-2 px-6 py-4 bg-blue-600/90 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"
             >
               <Cloud size={20} />
               Save to Cloud
@@ -177,8 +177,8 @@ export default function App() {
         </div>
 
         {/* Right Side: QR Code Preview */}
-        <div className="flex-1 w-full sticky top-8">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-10 flex flex-col items-center justify-center min-h-[500px]">
+        <div className="flex-1 w-full sticky top-24">
+          <div className="glass-card rounded-3xl p-10 flex flex-col items-center justify-center min-h-[500px]">
             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-8">Live Preview</h3>
             <QRPreview config={config} />
           </div>
@@ -193,9 +193,9 @@ export default function App() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+              className="glass-card rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border-white/30"
             >
-              <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+              <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/30">
                 <h3 className="font-bold text-gray-800 flex items-center gap-2">
                   <Save size={20} className="text-blue-600" />
                   Save Style to Cloud
@@ -211,20 +211,20 @@ export default function App() {
                   placeholder="e.g., My Professional Style"
                   value={saveName}
                   onChange={(e) => setSaveName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-xl glass-input outline-none transition-all"
                   autoFocus
                 />
                 <div className="flex gap-3 pt-2">
                   <button 
                     onClick={() => setShowSaveModal(false)}
-                    className="flex-1 px-6 py-3 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50 transition-all"
+                    className="flex-1 px-6 py-3 glass-card rounded-xl font-bold text-gray-600 hover:bg-white/50 transition-all"
                   >
                     Cancel
                   </button>
                   <button 
                     onClick={confirmSave}
                     disabled={!saveName.trim() || isSaving}
-                    className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-200"
+                    className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
                   >
                     {isSaving ? 'Saving...' : 'Save Now'}
                   </button>

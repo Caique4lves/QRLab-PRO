@@ -12,8 +12,8 @@ export const QRHistory: React.FC<QRHistoryProps> = ({ onLoadConfig }) => {
 
   if (history.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 px-4 text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
+      <div className="flex flex-col items-center justify-center py-12 px-4 text-center glass-card rounded-2xl border-white/20">
+        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-gray-400 mb-4">
           <Clock size={24} />
         </div>
         <h3 className="text-gray-900 font-bold mb-1">Histórico Vazio</h3>
@@ -43,7 +43,7 @@ export const QRHistory: React.FC<QRHistoryProps> = ({ onLoadConfig }) => {
         {history.map((item: HistoryItem) => (
           <div 
             key={item.id}
-            className="group bg-white border border-gray-100 p-3 rounded-xl shadow-sm hover:shadow-md hover:border-blue-100 transition-all flex items-center justify-between"
+            className="group glass-card p-3 rounded-xl hover:bg-white/40 transition-all flex items-center justify-between"
           >
             <div className="flex items-center gap-3 overflow-hidden">
               <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 shrink-0">
@@ -77,7 +77,7 @@ export const QRHistory: React.FC<QRHistoryProps> = ({ onLoadConfig }) => {
         ))}
       </div>
       
-      <div className="bg-blue-50 p-3 rounded-xl border border-blue-100">
+      <div className="bg-blue-600/10 backdrop-blur-sm p-3 rounded-xl border border-blue-500/20">
         <p className="text-[10px] text-blue-700 font-medium leading-relaxed">
           💡 <strong>Limite de 1 item:</strong> O histórico local é limitado. Conecte sua conta para salvar QR Codes ilimitados na nuvem!
         </p>

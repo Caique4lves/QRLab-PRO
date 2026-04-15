@@ -44,7 +44,7 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
           value={config.data}
           onChange={handleInputChange}
           placeholder="https://example.com"
-          className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#333333] focus:border-transparent outline-none transition-all"
+          className="w-full px-4 py-2 glass-input rounded-lg outline-none transition-all"
         />
       </div>
 
@@ -90,7 +90,7 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
             name="width"
             value={config.width}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#333333] focus:border-transparent outline-none transition-all"
+            className="w-full px-4 py-2 glass-input rounded-lg outline-none transition-all"
           />
         </div>
 
@@ -105,7 +105,7 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
             name="height"
             value={config.height}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#333333] focus:border-transparent outline-none transition-all"
+            className="w-full px-4 py-2 glass-input rounded-lg outline-none transition-all"
           />
         </div>
 
@@ -120,7 +120,7 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
             name="margin"
             value={config.margin}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#333333] focus:border-transparent outline-none transition-all"
+            className="w-full px-4 py-2 glass-input rounded-lg outline-none transition-all"
           />
         </div>
       </div>

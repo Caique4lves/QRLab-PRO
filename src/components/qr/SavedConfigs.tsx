@@ -33,7 +33,7 @@ export function SavedConfigs({ onApply }: SavedConfigsProps) {
     <div className="mt-6">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-4 bg-white border border-gray-200 rounded-lg font-semibold text-gray-700 hover:bg-gray-50 transition-all shadow-sm"
+        className="w-full flex items-center justify-between px-6 py-4 glass-card rounded-xl font-semibold text-gray-700 hover:bg-white/50 transition-all"
       >
         <div className="flex items-center gap-2">
           <History size={20} className="text-blue-600" />
@@ -57,14 +57,14 @@ export function SavedConfigs({ onApply }: SavedConfigsProps) {
           >
             <div className="pt-2 space-y-2">
               {savedQRs.length === 0 ? (
-                <div className="p-8 text-center bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                <div className="p-8 text-center glass-card rounded-xl border-white/20">
                   <p className="text-sm text-gray-500">No saved styles yet. Create one and save it!</p>
                 </div>
               ) : (
                 savedQRs.map((qr) => (
                   <div
                     key={qr.id}
-                    className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-300 transition-colors group"
+                    className="flex items-center justify-between p-4 glass-card rounded-xl hover:bg-white/40 transition-all group"
                   >
                     <div className="flex flex-col">
                       <span className="font-bold text-gray-800">{qr.name}</span>

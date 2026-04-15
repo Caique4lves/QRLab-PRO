@@ -13,7 +13,7 @@ export function LoginButton() {
   if (user) {
     return (
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-200">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
           {user.photoURL ? (
             <img 
               src={user.photoURL} 
@@ -24,13 +24,13 @@ export function LoginButton() {
           ) : (
             <UserIcon size={16} className="text-gray-500" />
           )}
-          <span className="text-sm font-medium text-gray-700 hidden sm:inline">
+          <span className="text-sm font-medium text-white/90 hidden sm:inline">
             {user.displayName?.split(' ')[0]}
           </span>
         </div>
         <button
           onClick={logout}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-600 hover:text-red-600 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white/70 hover:text-red-400 transition-colors"
         >
           <LogOut size={18} />
           <span className="hidden sm:inline">Logout</span>
@@ -42,7 +42,7 @@ export function LoginButton() {
   return (
     <button
       onClick={signIn}
-      className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-all shadow-sm active:scale-[0.98]"
+      className="flex items-center gap-2 px-6 py-2 bg-blue-600/90 backdrop-blur-sm text-white rounded-lg font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"
     >
       <LogIn size={18} />
       Login with Google

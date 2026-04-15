@@ -38,7 +38,7 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
                 ...config,
                 cornersSquareOptions: { ...config.cornersSquareOptions, color: e.target.value }
               })}
-              className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none text-sm"
+              className="flex-1 px-4 py-2 glass-input rounded-lg outline-none text-sm"
             />
           </div>
         </div>
@@ -52,8 +52,8 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
               })}
               className={`px-3 py-2 text-xs rounded-lg border transition-all ${
                 config.cornersSquareOptions.type === type
-                  ? 'bg-[#333333] text-white border-[#333333]'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20'
+                  : 'bg-white/50 backdrop-blur-sm text-gray-600 border-white/30 hover:bg-white/80'
               }`}
             >
               {type.charAt(0).toUpperCase() + type.slice(1).replace('-', ' ')}
@@ -87,7 +87,7 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
                 ...config,
                 cornersDotOptions: { ...config.cornersDotOptions, color: e.target.value }
               })}
-              className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none text-sm"
+              className="flex-1 px-4 py-2 glass-input rounded-lg outline-none text-sm"
             />
           </div>
         </div>
@@ -101,8 +101,8 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
               })}
               className={`px-3 py-2 text-xs rounded-lg border transition-all ${
                 config.cornersDotOptions.type === type
-                  ? 'bg-[#333333] text-white border-[#333333]'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20'
+                  : 'bg-white/50 backdrop-blur-sm text-gray-600 border-white/30 hover:bg-white/80'
               }`}
             >
               {type.charAt(0).toUpperCase() + type.slice(1).replace('-', ' ')}
