@@ -42,52 +42,87 @@ export const QRPreview: React.FC<QRPreviewProps> = ({ config, hideUI = false, on
     };
   }, []);
 
+  const [validImage, setValidImage] = React.useState<string | undefined>(undefined);
+
+  // Validate image before passing to QR library
+  useEffect(() => {
+    if (!config.image) {
+      setValidImage(undefined);
+      return;
+    }
+
+    const img = new Image();
+    const timeout = setTimeout(() => {
+      img.src = ''; // Cancel loading
+      setValidImage(undefined);
+    }, 5000);
+
+    img.onload = () => {
+      clearTimeout(timeout);
+      setValidImage(config.image!);
+    };
+    img.onerror = () => {
+      clearTimeout(timeout);
+      setValidImage(undefined);
+    };
+    img.src = config.image;
+
+    return () => clearTimeout(timeout);
+  }, [config.image]);
+
   // Update the instance whenever config changes
   useEffect(() => {
     if (!qrCodeInstance.current) return;
 
-    const isLocalImage = config.image?.startsWith('blob:') || config.image?.startsWith('data:');
+    const isLocalImage = validImage?.startsWith('blob:') || validImage?.startsWith('data:');
     
     const options = {
       width: config.width || 300,
       height: config.height || 300,
       data: config.data || ' ',
       margin: config.margin ?? 10,
-      image: config.image || undefined,
+      image: validImage || undefined,
       dotsOptions: {
-        color: config.dotsOptions?.color || '#ffffff',
+        color: config.dotsOptions?.color || '#000000',
         type: config.dotsOptions?.type || 'square'
       },
       backgroundOptions: {
-        color: config.backgroundOptions?.color === 'transparent' ? 'rgba(0,0,0,0)' : (config.backgroundOptions?.color || 'transparent')
+        color: config.backgroundOptions?.color === 'transparent' ? 'rgba(0,0,0,0)' : (config.backgroundOptions?.color || '#ffffff')
       },
       imageOptions: {
-        ...config.imageOptions,
+        hideBackgroundDots: config.imageOptions?.hideBackgroundDots ?? true,
+        imageSize: Math.min(config.imageOptions?.imageSize || 0.4, 1.0),
+        margin: config.imageOptions?.margin ?? 20,
         crossOrigin: isLocalImage ? undefined : (config.imageOptions?.crossOrigin || 'anonymous'),
-        imageSize: config.imageOptions?.imageSize || 0.4,
-        hideBackgroundDots: config.imageOptions?.hideBackgroundDots ?? true
       },
       cornersSquareOptions: {
-        color: config.cornersSquareOptions?.color || config.dotsOptions?.color || '#ffffff',
+        color: config.cornersSquareOptions?.color || config.dotsOptions?.color || '#000000',
         type: config.cornersSquareOptions?.type || 'square'
       },
       cornersDotOptions: {
-        color: config.cornersDotOptions?.color || config.dotsOptions?.color || '#ffffff',
+        color: config.cornersDotOptions?.color || config.dotsOptions?.color || '#000000',
         type: config.cornersDotOptions?.type || 'square'
       },
     };
 
-    qrCodeInstance.current.update(options);
-
-    // Safety check: if the container is empty, re-append
+    // Small delay to debounce rapid color changes
     const timer = setTimeout(() => {
-      if (qrRef.current && qrRef.current.innerHTML === '') {
-        qrCodeInstance.current?.append(qrRef.current);
+      if (qrCodeInstance.current) {
+        try {
+          qrCodeInstance.current.update(options);
+          
+          // Ensure canvas is still there
+          if (qrRef.current && qrRef.current.childElementCount === 0) {
+            qrCodeInstance.current.append(qrRef.current);
+          }
+        } catch (err) {
+          console.error('QR Update Error:', err);
+        }
       }
     }, 50);
 
     return () => clearTimeout(timer);
-  }, [config]);
+  }, [config, validImage]);
 
   const onDownload = (extension: 'png' | 'jpeg' | 'webp' | 'svg') => {
     qrCodeInstance.current?.download({ extension });
@@ -109,10 +144,22 @@ export const QRPreview: React.FC<QRPreviewProps> = ({ config, hideUI = false, on
           onClick={() => {
             if (onReset) {
               onReset();
-            } else if (qrRef.current && qrCodeInstance.current) {
+            } else if (qrRef.current) {
+              // Completely re-initialize the instance
               qrRef.current.innerHTML = '';
+              qrCodeInstance.current = new QRCodeStyling({
+                type: 'canvas',
+                width: config.width || 300,
+                height: config.height || 300,
+                data: config.data || ' ',
+                margin: config.margin ?? 10,
+                dotsOptions: config.dotsOptions,
+                backgroundOptions: config.backgroundOptions,
+                imageOptions: config.imageOptions,
+                cornersSquareOptions: config.cornersSquareOptions,
+                cornersDotOptions: config.cornersDotOptions,
+              });
               qrCodeInstance.current.append(qrRef.current);
-              qrCodeInstance.current.update({});
             }
           }}
           className="flex items-center gap-2 px-4 py-4 glass-button text-white/70 rounded-2xl text-xs font-bold hover:text-white transition-colors border border-white/10"
@@ -143,6 +190,9 @@ export const QRPreview: React.FC<QRPreviewProps> = ({ config, hideUI = false, on
           Salvar
         </button>
       </div>
+      <p className="text-[10px] text-gray-500 max-w-[300px] text-center leading-tight opacity-60">
+        Dica: Se o QR Code sumir, clique em "Redesenhar". Se a imagem não aparecer, verifique se a URL é válida ou tente enviar o arquivo novamente.
+      </p>
     </div>
   );
 };

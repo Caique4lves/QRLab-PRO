@@ -17,7 +17,7 @@ export const Header: React.FC = () => {
       <div className="flex items-center gap-8 text-sm font-medium">
         <div className="hidden md:flex items-center gap-8">
           <a 
-            href="https://github.com/Caique4lves/QR-Code-Styling" 
+            href="https://github.com/Caique4lves/QRLab-PRO" 
             target="_blank" 
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-white/60 hover:text-white transition-colors"

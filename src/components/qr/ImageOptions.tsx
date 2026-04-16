@@ -18,21 +18,40 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
   const [localPreview, setLocalPreview] = useState<string | null>(null);
   const uploadTaskRef = useRef<UploadTask | null>(null);
 
-  // Cleanup local preview URL to avoid memory leaks
+  const [imageError, setImageError] = useState(false);
+
+  // Reset image error when config image changes
+  useEffect(() => {
+    setImageError(false);
+  }, [config.image]);
+
+  // Sync isUploading state with config changes
+  useEffect(() => {
+    if (!config.image) {
+      setIsUploading(false);
+      setUploadProgress(0);
+      if (uploadTaskRef.current) {
+        uploadTaskRef.current.cancel();
+        uploadTaskRef.current = null;
+      }
+    }
+  }, [config.image]);
+
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (localPreview) URL.revokeObjectURL(localPreview);
       if (uploadTaskRef.current) uploadTaskRef.current.cancel();
     };
-  }, [localPreview]);
+  }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // 1. Create local preview immediately (works without login)
+    // 1. Create local preview immediately
     const previewUrl = URL.createObjectURL(file);
     setLocalPreview(previewUrl);
+    setImageError(false);
     
     onChange({
       ...config,
@@ -56,32 +75,31 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
       });
       
       uploadTaskRef.current = task;
-      const permanentUrl = await promise;
+      
+      // Add a timeout of 30 seconds to the upload
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('timeout')), 30000)
+      );
+
+      const permanentUrl = await Promise.race([promise, timeoutPromise]) as string;
 
       // 3. Update with permanent URL once finished
       onChange({
         ...config,
         image: permanentUrl
       });
-      setLocalPreview(null); // Clear local preview state as we have the real URL now
+      setLocalPreview(null);
     } catch (err: any) {
-      if (err.code === 'storage/canceled') {
+      if (err.message === 'timeout') {
+        setError('O upload demorou muito tempo. A imagem continuará funcionando localmente, mas não será salva na nuvem.');
+        if (uploadTaskRef.current) uploadTaskRef.current.cancel();
+      } else if (err.code === 'storage/canceled') {
         console.log('Upload canceled by user');
         return;
+      } else {
+        console.error('Upload failed:', err);
+        setError('Erro ao salvar na nuvem. A imagem funcionará apenas nesta sessão.');
       }
-      
-      console.error('Upload failed:', err);
-      let message = 'Erro ao fazer upload. Verifique se o Storage está ativado e as regras de CORS configuradas.';
-      
-      if (err.code === 'storage/unauthorized') {
-        message = 'Sem permissão. Verifique as regras de segurança do Storage.';
-      } else if (err.code === 'storage/retry-limit-exceeded') {
-        message = 'Tempo limite excedido. Verifique sua conexão ou as configurações de CORS do Firebase.';
-      } else if (err.code === 'storage/unknown') {
-        message = 'Erro desconhecido. Isso geralmente indica falta de configuração de CORS no bucket.';
-      }
-      
-      setError(message);
     } finally {
       setIsUploading(false);
       uploadTaskRef.current = null;
@@ -116,12 +134,20 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
         
         {config.image ? (
           <div className="relative group w-32 h-32 mx-auto">
-            <img 
-              src={config.image} 
-              alt="QR Logo" 
-              className="w-full h-full object-contain glass-card p-2"
-              referrerPolicy="no-referrer"
-            />
+            {imageError ? (
+              <div className="w-full h-full flex flex-col items-center justify-center glass-card p-2 text-red-400 bg-red-500/5">
+                <AlertCircle size={24} />
+                <span className="text-[10px] font-bold mt-1">ERRO</span>
+              </div>
+            ) : (
+              <img 
+                src={config.image} 
+                alt="QR Logo" 
+                className="w-full h-full object-contain glass-card p-2"
+                referrerPolicy="no-referrer"
+                onError={() => setImageError(true)}
+              />
+            )}
             {isUploading && (
               <div className="absolute inset-0 bg-black/40 rounded-2xl flex flex-col items-center justify-center backdrop-blur-sm">
                 <div className="relative w-10 h-10 mb-1">
@@ -230,7 +256,7 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
           <input
             type="range"
             min="0.1"
-            max="2"
+            max="1.0"
             step="0.05"
             value={config.imageOptions.imageSize}
             onChange={(e) => onChange({
