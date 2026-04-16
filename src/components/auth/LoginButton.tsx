@@ -33,7 +33,7 @@ export function LoginButton() {
           className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white/50 hover:text-red-400 transition-colors"
         >
           <LogOut size={18} />
-          <span className="hidden sm:inline">Logout</span>
+          <span className="hidden sm:inline">Sair</span>
         </button>
       </div>
     );
@@ -45,7 +45,7 @@ export function LoginButton() {
       className="flex items-center gap-2 px-6 py-2 bg-blue-600/90 backdrop-blur-sm text-white rounded-lg font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"
     >
       <LogIn size={18} />
-      Login with Google
+      Entrar com Google
     </button>
   );
 }

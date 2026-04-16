@@ -22,7 +22,7 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
       <div className="space-y-2">
         <label className="flex items-center gap-2 text-sm font-medium text-white/80">
           <Link size={16} className="text-blue-400" />
-          Data
+          Dados
         </label>
         <input
           type="text"
@@ -40,7 +40,7 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-medium text-white/80">
             <Maximize size={16} className="text-blue-400" />
-            Width
+            Largura
           </label>
           <input
             type="number"
@@ -55,7 +55,7 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-medium text-white/80">
             <Maximize size={16} className="text-blue-400" />
-            Height
+            Altura
           </label>
           <input
             type="number"
@@ -70,7 +70,7 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-medium text-white/80">
             <Move size={16} className="text-blue-400" />
-            Margin
+            Margem
           </label>
           <input
             type="number"

@@ -29,11 +29,9 @@ export default function App() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const { user, signIn } = useAuth();
 
-  // Reset config when user logs out to prevent "leaking" saved styles to unauthenticated state
+  // Reset config when auth state changes (login/logout) for a clean slate
   useEffect(() => {
-    if (!user) {
-      setConfig(JSON.parse(JSON.stringify(DEFAULT_QR_CONFIG)));
-    }
+    setConfig(JSON.parse(JSON.stringify(DEFAULT_QR_CONFIG)));
   }, [user]);
 
   const toggleSection = (section: Section) => {
@@ -94,7 +92,7 @@ export default function App() {
               onClick={() => toggleSection('main')}
               className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
-              <span>Main Options</span>
+              <span>Opções Principais</span>
               {openSection === 'main' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </button>
             {openSection === 'main' && (
@@ -110,7 +108,7 @@ export default function App() {
               onClick={() => toggleSection('dots')}
               className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
-              <span>Dots Options</span>
+              <span>Opções de Pontos</span>
               {openSection === 'dots' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </button>
             {openSection === 'dots' && (
@@ -126,7 +124,7 @@ export default function App() {
               onClick={() => toggleSection('corners')}
               className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
-              <span>Corners Options</span>
+              <span>Opções de Cantos</span>
               {openSection === 'corners' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </button>
             {openSection === 'corners' && (
@@ -142,7 +140,7 @@ export default function App() {
               onClick={() => toggleSection('background')}
               className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
-              <span>Background Options</span>
+              <span>Opções de Fundo</span>
               {openSection === 'background' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </button>
             {openSection === 'background' && (
@@ -158,7 +156,7 @@ export default function App() {
               onClick={() => toggleSection('image')}
               className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
-              <span>Image Options</span>
+              <span>Opções de Imagem</span>
               {openSection === 'image' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </button>
             {openSection === 'image' && (
@@ -175,14 +173,14 @@ export default function App() {
               className="flex items-center justify-center gap-2 px-6 py-4 glass-card rounded-xl font-bold text-white/80 hover:bg-white/10 transition-all active:scale-[0.98]"
             >
               <FileJson size={20} />
-              Export JSON
+              Exportar JSON
             </button>
             <button 
               onClick={handleSaveToCloud}
               className="flex items-center justify-center gap-2 px-6 py-4 bg-blue-600/80 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"
             >
               <Cloud size={20} />
-              Save to Cloud
+              Salvar na Nuvem
             </button>
           </div>
 
@@ -200,7 +198,7 @@ export default function App() {
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
                  style={{ backgroundImage: 'conic-gradient(#fff 90deg, transparent 90deg 180deg, #fff 180deg 270deg, transparent 270deg)', backgroundSize: '20px 20px' }} />
             
-            <h3 className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em] mb-12 relative z-10">Live Preview</h3>
+            <h3 className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em] mb-12 relative z-10">Visualização ao Vivo</h3>
             <div className="relative z-10">
               <QRPreview config={config} onReset={() => setConfig(JSON.parse(JSON.stringify(DEFAULT_QR_CONFIG)))} />
             </div>
@@ -225,17 +223,17 @@ export default function App() {
               <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
                 <h3 className="font-bold text-white/90 flex items-center gap-2">
                   <Save size={20} className="text-blue-500" />
-                  Save Style to Cloud
+                  Salvar Estilo na Nuvem
                 </h3>
                 <button onClick={() => setShowSaveModal(false)} className="text-white/40 hover:text-white">
                   <X size={20} />
                 </button>
               </div>
               <div className="p-6 space-y-4">
-                <p className="text-sm text-gray-400">Give your style a name to find it later in your history.</p>
+                <p className="text-sm text-gray-400">Dê um nome ao seu estilo para encontrá-lo mais tarde no seu histórico.</p>
                 <input 
                   type="text"
-                  placeholder="e.g., My Professional Style"
+                  placeholder="Ex: Meu Estilo Profissional"
                   value={saveName}
                   onChange={(e) => setSaveName(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl glass-input outline-none transition-all"
@@ -246,14 +244,14 @@ export default function App() {
                     onClick={() => setShowSaveModal(false)}
                     className="flex-1 px-6 py-3 glass-card rounded-xl font-bold text-white/60 hover:bg-white/10 transition-all border-white/5"
                   >
-                    Cancel
+                    Cancelar
                   </button>
                   <button 
                     onClick={confirmSave}
                     disabled={!saveName.trim() || isSaving}
                     className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
                   >
-                    {isSaving ? 'Saving...' : 'Save Now'}
+                    {isSaving ? 'Salvando...' : 'Salvar Agora'}
                   </button>
                 </div>
               </div>

@@ -37,7 +37,7 @@ export function SavedConfigs({ onApply }: SavedConfigsProps) {
       >
         <div className="flex items-center gap-2">
           <History size={20} className="text-blue-500" />
-          <span>Your Saved Styles ({savedQRs.length})</span>
+          <span>Seus Estilos Salvos ({savedQRs.length})</span>
         </div>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
@@ -58,7 +58,7 @@ export function SavedConfigs({ onApply }: SavedConfigsProps) {
             <div className="pt-2 space-y-2">
               {savedQRs.length === 0 ? (
                 <div className="p-8 text-center glass-card rounded-xl border-white/5">
-                  <p className="text-sm text-gray-500">No saved styles yet. Create one and save it!</p>
+                  <p className="text-sm text-gray-500">Nenhum estilo salvo ainda. Crie um e salve-o!</p>
                 </div>
               ) : (
                 savedQRs.map((qr) => (
@@ -76,7 +76,7 @@ export function SavedConfigs({ onApply }: SavedConfigsProps) {
                       <button
                         onClick={() => onApply(JSON.parse(JSON.stringify(qr.config)))}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
-                        title="Apply this style"
+                        title="Aplicar este estilo"
                       >
                         <Play size={18} fill="currentColor" />
                       </button>

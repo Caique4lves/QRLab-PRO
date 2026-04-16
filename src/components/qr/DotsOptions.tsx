@@ -15,7 +15,7 @@ export const DotsOptions: React.FC<DotsOptionsProps> = ({ config, onChange }) =>
       <div className="space-y-2">
         <label className="flex items-center gap-2 text-sm font-medium text-white/80">
           <Palette size={16} className="text-blue-400" />
-          Dots Color
+          Cor dos Pontos
         </label>
         <div className="flex gap-3 items-center">
           <input
@@ -40,12 +40,12 @@ export const DotsOptions: React.FC<DotsOptionsProps> = ({ config, onChange }) =>
             <button 
               onClick={() => onChange({ ...config, dotsOptions: { ...config.dotsOptions, color: '#ffffff' } })}
               className="w-8 h-8 rounded-lg bg-white border border-white/20 shadow-sm"
-              title="White"
+              title="Branco"
             />
             <button 
               onClick={() => onChange({ ...config, dotsOptions: { ...config.dotsOptions, color: '#000000' } })}
               className="w-8 h-8 rounded-lg bg-black border border-white/20 shadow-sm"
-              title="Black"
+              title="Preto"
             />
           </div>
         </div>
@@ -54,7 +54,7 @@ export const DotsOptions: React.FC<DotsOptionsProps> = ({ config, onChange }) =>
       <div className="space-y-2">
         <label className="flex items-center gap-2 text-sm font-medium text-white/80">
           <Shapes size={16} className="text-blue-400" />
-          Dots Type
+          Tipo de Pontos
         </label>
         <div className="grid grid-cols-2 gap-2">
           {types.map((type) => (

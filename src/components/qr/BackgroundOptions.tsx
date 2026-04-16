@@ -13,7 +13,7 @@ export const BackgroundOptions: React.FC<BackgroundOptionsProps> = ({ config, on
       <div className="space-y-2">
         <label className="flex items-center gap-2 text-sm font-medium text-white/80">
           <Palette size={16} className="text-blue-400" />
-          Background Color
+          Cor de Fundo
         </label>
         <div className="flex gap-3 items-center">
           <input
@@ -45,7 +45,7 @@ export const BackgroundOptions: React.FC<BackgroundOptionsProps> = ({ config, on
                 : 'glass-button text-white/60'
             }`}
           >
-            Transparent
+            Transparente
           </button>
         </div>
       </div>

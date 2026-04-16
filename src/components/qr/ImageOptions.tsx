@@ -111,7 +111,7 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm font-medium text-white/80">
           <ImageIcon size={16} className="text-blue-400" />
-          Logo Image
+          Imagem da Logo
         </label>
         
         {config.image ? (
@@ -223,7 +223,7 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
           <div className="flex justify-between items-center">
             <label className="flex items-center gap-2 text-sm font-medium text-white/80">
               <Maximize size={16} className="text-blue-400" />
-              Image Size
+              Tamanho da Imagem
             </label>
             <span className="text-xs font-mono text-white/40">{(config.imageOptions.imageSize * 100).toFixed(0)}%</span>
           </div>
@@ -265,7 +265,7 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-medium text-white/80">
             <Move size={16} className="text-blue-400" />
-            Image Margin
+            Margem da Imagem
           </label>
           <input
             type="number"
@@ -281,7 +281,7 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-medium text-white/80">
             <ImageIcon size={16} className="text-blue-400" />
-            Cross Origin
+            Origem Cruzada (CORS)
           </label>
           <select
             value={config.imageOptions.crossOrigin}
@@ -291,8 +291,8 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
             })}
             className="w-full px-4 py-2 glass-input rounded-lg outline-none transition-all"
           >
-            <option value="anonymous">Anonymous</option>
-            <option value="use-credentials">Use Credentials</option>
+            <option value="anonymous">Anônimo</option>
+            <option value="use-credentials">Usar Credenciais</option>
           </select>
         </div>
       </div>

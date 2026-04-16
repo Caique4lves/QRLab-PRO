@@ -79,10 +79,10 @@ export const Hero: React.FC = () => {
               </h1>
               <div className="space-y-2">
                 <p className="text-xl md:text-2xl font-light text-gray-300">
-                  An open source JS library
+                  Uma biblioteca JS de código aberto
                 </p>
                 <p className="text-xl md:text-2xl font-medium text-blue-400/80 italic">
-                  For generating styled QR codes
+                  Para gerar QR codes estilizados
                 </p>
               </div>
               

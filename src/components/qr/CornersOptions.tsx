@@ -15,11 +15,11 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
     <div className="space-y-8">
       {/* Corners Square */}
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Corners Square</h3>
+        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Quadrado dos Cantos</h3>
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-medium text-white/80">
             <Palette size={16} className="text-blue-400" />
-            Color
+            Cor
           </label>
           <div className="flex gap-3 items-center">
             <input
@@ -74,11 +74,11 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
 
       {/* Corners Dot */}
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Corners Dot</h3>
+        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Ponto dos Cantos</h3>
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-sm font-medium text-white/80">
             <Palette size={16} className="text-blue-400" />
-            Color
+            Cor
           </label>
           <div className="flex gap-3 items-center">
             <input

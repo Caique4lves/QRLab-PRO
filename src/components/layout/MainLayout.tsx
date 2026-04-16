@@ -20,7 +20,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {children}
       </main>
       <footer className="py-8 text-center text-gray-500 text-xs relative z-10 border-t border-white/5">
-        © {new Date().getFullYear()} QRLab PRO • Built with React & Tailwind
+        © {new Date().getFullYear()} QRLab PRO • Desenvolvido com React & Tailwind
       </footer>
     </div>
   );
