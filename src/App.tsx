@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MainLayout } from './components/layout/MainLayout';
 import { QROptions } from './components/qr/QROptions';
 import { DotsOptions } from './components/qr/DotsOptions';
@@ -14,7 +14,7 @@ import { QRPreview } from './components/qr/QRPreview';
 import { QRHistory } from './components/qr/QRHistory';
 import { SavedConfigs } from './components/qr/SavedConfigs';
 import { QRConfig, DEFAULT_QR_CONFIG } from './types/qr';
-import { ChevronDown, ChevronRight, FileJson, Cloud, Save, X } from 'lucide-react';
+import { ChevronDown, ChevronRight, FileJson, Cloud, Save, X, RefreshCw } from 'lucide-react';
 import { useAuth } from './components/auth/AuthProvider';
 import { saveQRCode } from './services/qrService';
 import { motion, AnimatePresence } from 'motion/react';
@@ -28,6 +28,13 @@ export default function App() {
   const [saveName, setSaveName] = useState('');
   const [showSaveModal, setShowSaveModal] = useState(false);
   const { user, signIn } = useAuth();
+
+  // Reset config when user logs out to prevent "leaking" saved styles to unauthenticated state
+  useEffect(() => {
+    if (!user) {
+      setConfig(JSON.parse(JSON.stringify(DEFAULT_QR_CONFIG)));
+    }
+  }, [user]);
 
   const toggleSection = (section: Section) => {
     setOpenSection(openSection === section ? null : section);
@@ -69,13 +76,23 @@ export default function App() {
     <MainLayout>
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Left Side: Accordion Options */}
-        <div className="w-full lg:w-[600px] space-y-2">
+        <div className="w-full lg:w-[600px] space-y-4">
+          <div className="flex items-center justify-between px-2">
+            <h2 className="text-xl font-black text-white tracking-tight uppercase opacity-50">Configurações</h2>
+            <button 
+              onClick={() => setConfig(JSON.parse(JSON.stringify(DEFAULT_QR_CONFIG)))}
+              className="text-[10px] font-bold text-blue-400 hover:text-blue-300 transition-colors uppercase tracking-widest flex items-center gap-1.5"
+            >
+              <RefreshCw size={12} />
+              Resetar
+            </button>
+          </div>
           
           {/* Main Options */}
-          <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="glass-card rounded-2xl overflow-hidden border-white/5">
             <button 
               onClick={() => toggleSection('main')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
               <span>Main Options</span>
               {openSection === 'main' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -88,10 +105,10 @@ export default function App() {
           </div>
 
           {/* Dots Options */}
-          <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="glass-card rounded-2xl overflow-hidden border-white/5">
             <button 
               onClick={() => toggleSection('dots')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
               <span>Dots Options</span>
               {openSection === 'dots' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -104,10 +121,10 @@ export default function App() {
           </div>
 
           {/* Corners Options */}
-          <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="glass-card rounded-2xl overflow-hidden border-white/5">
             <button 
               onClick={() => toggleSection('corners')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
               <span>Corners Options</span>
               {openSection === 'corners' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -120,10 +137,10 @@ export default function App() {
           </div>
 
           {/* Background Options */}
-          <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="glass-card rounded-2xl overflow-hidden border-white/5">
             <button 
               onClick={() => toggleSection('background')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
               <span>Background Options</span>
               {openSection === 'background' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -136,10 +153,10 @@ export default function App() {
           </div>
 
           {/* Image Options */}
-          <div className="glass-card rounded-2xl overflow-hidden">
+          <div className="glass-card rounded-2xl overflow-hidden border-white/5">
             <button 
               onClick={() => toggleSection('image')}
-              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-gray-700 hover:bg-white/30 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-left font-semibold text-white/90 hover:bg-white/5 transition-colors"
             >
               <span>Image Options</span>
               {openSection === 'image' ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
@@ -155,14 +172,14 @@ export default function App() {
           <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button 
               onClick={exportToJson}
-              className="flex items-center justify-center gap-2 px-6 py-4 glass-card rounded-xl font-bold text-gray-700 hover:bg-white/50 transition-all active:scale-[0.98]"
+              className="flex items-center justify-center gap-2 px-6 py-4 glass-card rounded-xl font-bold text-white/80 hover:bg-white/10 transition-all active:scale-[0.98]"
             >
               <FileJson size={20} />
               Export JSON
             </button>
             <button 
               onClick={handleSaveToCloud}
-              className="flex items-center justify-center gap-2 px-6 py-4 bg-blue-600/90 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"
+              className="flex items-center justify-center gap-2 px-6 py-4 bg-blue-600/80 backdrop-blur-sm text-white rounded-xl font-bold hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"
             >
               <Cloud size={20} />
               Save to Cloud
@@ -178,9 +195,19 @@ export default function App() {
 
         {/* Right Side: QR Code Preview */}
         <div className="flex-1 w-full sticky top-24">
-          <div className="glass-card rounded-3xl p-10 flex flex-col items-center justify-center min-h-[500px]">
-            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-8">Live Preview</h3>
-            <QRPreview config={config} />
+          <div className="glass-card rounded-3xl p-10 flex flex-col items-center justify-center min-h-[500px] border-white/5 relative overflow-hidden">
+            {/* Checkerboard pattern for transparency preview */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+                 style={{ backgroundImage: 'conic-gradient(#fff 90deg, transparent 90deg 180deg, #fff 180deg 270deg, transparent 270deg)', backgroundSize: '20px 20px' }} />
+            
+            <h3 className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em] mb-12 relative z-10">Live Preview</h3>
+            <div className="relative z-10">
+              <QRPreview config={config} onReset={() => setConfig(JSON.parse(JSON.stringify(DEFAULT_QR_CONFIG)))} />
+            </div>
+            
+            <p className="mt-8 text-[10px] text-white/30 text-center max-w-xs relative z-10">
+              Dica: Se o QR Code "sumir", verifique se a cor dos pontos não é igual à cor do fundo.
+            </p>
           </div>
         </div>
       </div>
@@ -195,17 +222,17 @@ export default function App() {
               exit={{ scale: 0.9, opacity: 0 }}
               className="glass-card rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border-white/30"
             >
-              <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/30">
-                <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                  <Save size={20} className="text-blue-600" />
+              <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
+                <h3 className="font-bold text-white/90 flex items-center gap-2">
+                  <Save size={20} className="text-blue-500" />
                   Save Style to Cloud
                 </h3>
-                <button onClick={() => setShowSaveModal(false)} className="text-gray-400 hover:text-gray-600">
+                <button onClick={() => setShowSaveModal(false)} className="text-white/40 hover:text-white">
                   <X size={20} />
                 </button>
               </div>
               <div className="p-6 space-y-4">
-                <p className="text-sm text-gray-600">Give your style a name to find it later in your history.</p>
+                <p className="text-sm text-gray-400">Give your style a name to find it later in your history.</p>
                 <input 
                   type="text"
                   placeholder="e.g., My Professional Style"
@@ -217,7 +244,7 @@ export default function App() {
                 <div className="flex gap-3 pt-2">
                   <button 
                     onClick={() => setShowSaveModal(false)}
-                    className="flex-1 px-6 py-3 glass-card rounded-xl font-bold text-gray-600 hover:bg-white/50 transition-all"
+                    className="flex-1 px-6 py-3 glass-card rounded-xl font-bold text-white/60 hover:bg-white/10 transition-all border-white/5"
                   >
                     Cancel
                   </button>

@@ -23,25 +23,26 @@ export interface QRConfig {
     crossOrigin: string;
     margin: number;
     imageSize: number;
+    hideBackgroundDots: boolean;
   };
 }
 
 export const DEFAULT_QR_CONFIG: QRConfig = {
-  data: 'https://qr-code-styling.com',
+  data: 'https://qrlab.pro',
   image: null,
   width: 300,
   height: 300,
   margin: 10,
   dotsOptions: {
-    color: '#333333',
+    color: '#000000',
     type: 'square',
   },
   cornersSquareOptions: {
-    color: '#333333',
+    color: '#000000',
     type: 'square',
   },
   cornersDotOptions: {
-    color: '#333333',
+    color: '#000000',
     type: 'square',
   },
   backgroundOptions: {
@@ -51,5 +52,6 @@ export const DEFAULT_QR_CONFIG: QRConfig = {
     crossOrigin: 'anonymous',
     margin: 20,
     imageSize: 0.4,
+    hideBackgroundDots: true,
   },
 };

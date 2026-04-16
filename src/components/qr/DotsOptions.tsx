@@ -13,8 +13,8 @@ export const DotsOptions: React.FC<DotsOptionsProps> = ({ config, onChange }) =>
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <Palette size={16} className="text-gray-400" />
+        <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+          <Palette size={16} className="text-blue-400" />
           Dots Color
         </label>
         <div className="flex gap-3 items-center">
@@ -25,7 +25,7 @@ export const DotsOptions: React.FC<DotsOptionsProps> = ({ config, onChange }) =>
               ...config,
               dotsOptions: { ...config.dotsOptions, color: e.target.value }
             })}
-            className="w-12 h-12 rounded cursor-pointer border-none p-0"
+            className="w-12 h-12 rounded cursor-pointer border-none p-0 bg-transparent"
           />
           <input
             type="text"
@@ -36,12 +36,24 @@ export const DotsOptions: React.FC<DotsOptionsProps> = ({ config, onChange }) =>
             })}
             className="flex-1 px-4 py-2 glass-input rounded-lg outline-none"
           />
+          <div className="flex gap-1">
+            <button 
+              onClick={() => onChange({ ...config, dotsOptions: { ...config.dotsOptions, color: '#ffffff' } })}
+              className="w-8 h-8 rounded-lg bg-white border border-white/20 shadow-sm"
+              title="White"
+            />
+            <button 
+              onClick={() => onChange({ ...config, dotsOptions: { ...config.dotsOptions, color: '#000000' } })}
+              className="w-8 h-8 rounded-lg bg-black border border-white/20 shadow-sm"
+              title="Black"
+            />
+          </div>
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <Shapes size={16} className="text-gray-400" />
+        <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+          <Shapes size={16} className="text-blue-400" />
           Dots Type
         </label>
         <div className="grid grid-cols-2 gap-2">
@@ -52,10 +64,10 @@ export const DotsOptions: React.FC<DotsOptionsProps> = ({ config, onChange }) =>
                 ...config,
                 dotsOptions: { ...config.dotsOptions, type: type as any }
               })}
-              className={`px-4 py-2 text-sm rounded-lg border transition-all ${
+              className={`px-4 py-2 text-sm rounded-lg transition-all ${
                 config.dotsOptions.type === type
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20'
-                  : 'bg-white/50 backdrop-blur-sm text-gray-600 border-white/30 hover:bg-white/80'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                  : 'glass-button text-white/60'
               }`}
             >
               {type.charAt(0).toUpperCase() + type.slice(1).replace('-', ' ')}

@@ -13,7 +13,7 @@ const DECORATIVE_QR_LEFT: QRConfig = {
   cornersSquareOptions: { color: '#60a5fa', type: 'extra-rounded' },
   cornersDotOptions: { color: '#ffffff', type: 'dot' },
   backgroundOptions: { color: '#1a1a1a' },
-  imageOptions: { crossOrigin: 'anonymous', margin: 0, imageSize: 0.4 },
+  imageOptions: { crossOrigin: 'anonymous', margin: 0, imageSize: 0.4, hideBackgroundDots: true },
 };
 
 const DECORATIVE_QR_RIGHT: QRConfig = {
@@ -26,7 +26,7 @@ const DECORATIVE_QR_RIGHT: QRConfig = {
   cornersSquareOptions: { color: '#3b82f6', type: 'dot' },
   cornersDotOptions: { color: '#60a5fa', type: 'square' },
   backgroundOptions: { color: '#1a1a1a' },
-  imageOptions: { crossOrigin: 'anonymous', margin: 0, imageSize: 0.4 },
+  imageOptions: { crossOrigin: 'anonymous', margin: 0, imageSize: 0.4, hideBackgroundDots: true },
 };
 
 export const Hero: React.FC = () => {
@@ -106,7 +106,7 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Bottom Gradient Fade */}
-      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#f8fafc] to-transparent"></div>
+      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#0a0a0a] to-transparent"></div>
     </section>
   );
 };

@@ -16,26 +16,12 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onChange({
-          ...config,
-          image: reader.result as string,
-        });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   return (
     <div className="space-y-6">
       {/* Data Input */}
       <div className="space-y-2">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <Link size={16} className="text-gray-400" />
+        <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+          <Link size={16} className="text-blue-400" />
           Data
         </label>
         <input
@@ -48,41 +34,12 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
         />
       </div>
 
-      {/* Image File Input */}
-      <div className="space-y-2">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <ImageIcon size={16} className="text-gray-400" />
-          Image File
-        </label>
-        <div className="flex items-center gap-4">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-full file:border-0
-              file:text-sm file:font-semibold
-              file:bg-gray-100 file:text-gray-700
-              hover:file:bg-gray-200 transition-all cursor-pointer"
-          />
-          {config.image && (
-            <button 
-              onClick={() => onChange({ ...config, image: null })}
-              className="text-xs text-red-500 hover:underline"
-            >
-              Remove
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Dimensions Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Width */}
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-            <Maximize size={16} className="text-gray-400" />
+          <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+            <Maximize size={16} className="text-blue-400" />
             Width
           </label>
           <input
@@ -96,8 +53,8 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
 
         {/* Height */}
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-            <Maximize size={16} className="text-gray-400" />
+          <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+            <Maximize size={16} className="text-blue-400" />
             Height
           </label>
           <input
@@ -111,8 +68,8 @@ export const QROptions: React.FC<QROptionsProps> = ({ config, onChange }) => {
 
         {/* Margin */}
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-            <Move size={16} className="text-gray-400" />
+          <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+            <Move size={16} className="text-blue-400" />
             Margin
           </label>
           <input

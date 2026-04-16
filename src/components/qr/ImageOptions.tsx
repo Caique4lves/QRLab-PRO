@@ -30,20 +30,20 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!user) {
-      signIn();
-      return;
-    }
-
-    // 1. Create local preview immediately
+    // 1. Create local preview immediately (works without login)
     const previewUrl = URL.createObjectURL(file);
     setLocalPreview(previewUrl);
     
-    // Apply local preview to QR config so user sees it instantly
     onChange({
       ...config,
       image: previewUrl
     });
+
+    // 2. Only attempt upload if user is logged in
+    if (!user) {
+      setError('Imagem adicionada localmente. Faça login para salvar permanentemente na nuvem.');
+      return;
+    }
 
     setError(null);
     setIsUploading(true);
@@ -109,8 +109,8 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
   return (
     <div className="space-y-6">
       <div className="space-y-3">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-          <ImageIcon size={16} className="text-gray-400" />
+        <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+          <ImageIcon size={16} className="text-blue-400" />
           Logo Image
         </label>
         
@@ -119,11 +119,11 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
             <img 
               src={config.image} 
               alt="QR Logo" 
-              className="w-full h-full object-contain border border-gray-200 rounded-lg p-2 bg-gray-50"
+              className="w-full h-full object-contain glass-card p-2"
               referrerPolicy="no-referrer"
             />
             {isUploading && (
-              <div className="absolute inset-0 bg-black/40 rounded-lg flex flex-col items-center justify-center backdrop-blur-[1px]">
+              <div className="absolute inset-0 bg-black/40 rounded-2xl flex flex-col items-center justify-center backdrop-blur-sm">
                 <div className="relative w-10 h-10 mb-1">
                   <Loader2 size={40} className="text-white animate-spin opacity-80" />
                   <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white">
@@ -148,42 +148,64 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
             )}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 bg-gray-50 hover:bg-gray-100 transition-all cursor-pointer relative min-h-[160px]">
-            <input 
-              type="file" 
-              accept="image/*"
-              onChange={handleFileChange}
-              className="absolute inset-0 opacity-0 cursor-pointer"
-              disabled={isUploading}
-            />
-            {isUploading ? (
-              <div className="flex flex-col items-center">
-                <div className="relative w-12 h-12 mb-2">
-                  <Loader2 size={48} className="text-blue-500 animate-spin" />
-                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-blue-600">
-                    {uploadProgress}%
+          <div className="space-y-4">
+            <div className="flex flex-col items-center justify-center glass-card rounded-2xl p-8 hover:bg-white/50 transition-all cursor-pointer relative min-h-[160px]">
+              <input 
+                type="file" 
+                accept="image/*"
+                onChange={handleFileChange}
+                className="absolute inset-0 opacity-0 cursor-pointer"
+                disabled={isUploading}
+              />
+              {isUploading ? (
+                <div className="flex flex-col items-center">
+                  <div className="relative w-12 h-12 mb-2">
+                    <Loader2 size={48} className="text-blue-500 animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-blue-600">
+                      {uploadProgress}%
+                    </div>
                   </div>
+                  <p className="text-xs text-blue-500 font-medium mb-2">Enviando imagem...</p>
+                  <button 
+                    onClick={cancelUpload}
+                    className="px-3 py-1 glass-button text-gray-700 rounded-lg text-[10px] font-bold"
+                  >
+                    CANCELAR
+                  </button>
                 </div>
-                <p className="text-xs text-blue-500 font-medium mb-2">Enviando imagem...</p>
-                <button 
-                  onClick={cancelUpload}
-                  className="px-3 py-1 bg-gray-200 text-gray-700 rounded-lg text-[10px] font-bold hover:bg-gray-300 transition-colors"
-                >
-                  CANCELAR
-                </button>
+              ) : (
+                <>
+                  <Upload size={32} className="text-gray-400 mb-2" />
+                  <p className="text-xs text-gray-500 font-medium">Clique ou arraste para enviar</p>
+                  {!user && <p className="text-[10px] text-blue-500 mt-2 font-bold uppercase tracking-wider">Login necessário para salvar na nuvem</p>}
+                </>
+              )}
+            </div>
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/10"></div>
               </div>
-            ) : (
-              <>
-                <Upload size={32} className="text-gray-400 mb-2" />
-                <p className="text-xs text-gray-500 font-medium">Clique ou arraste para enviar</p>
-                {!user && <p className="text-[10px] text-blue-500 mt-2 font-bold uppercase tracking-wider">Login necessário</p>}
-              </>
-            )}
+              <div className="relative flex justify-center text-[10px] uppercase tracking-widest">
+                <span className="bg-[#0a0a0a] px-2 text-gray-500">ou use uma URL</span>
+              </div>
+            </div>
+
+            <input 
+              type="text"
+              placeholder="https://exemplo.com/logo.png"
+              className="w-full px-4 py-2 glass-input rounded-lg text-sm"
+              onBlur={(e) => {
+                if (e.target.value) {
+                  onChange({ ...config, image: e.target.value });
+                }
+              }}
+            />
           </div>
         )}
 
         {error && (
-          <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-100 rounded-lg text-red-600 text-xs animate-in fade-in slide-in-from-top-1">
+          <div className="flex items-start gap-2 p-3 bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-xl text-red-600 text-xs animate-in fade-in slide-in-from-top-1">
             <AlertCircle size={14} className="shrink-0 mt-0.5" />
             <div className="space-y-1">
               <p className="font-bold">Erro no Upload</p>
@@ -199,29 +221,50 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-              <Maximize size={16} className="text-gray-400" />
+            <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+              <Maximize size={16} className="text-blue-400" />
               Image Size
             </label>
-            <span className="text-xs font-mono text-gray-400">{(config.imageOptions.imageSize * 100).toFixed(0)}%</span>
+            <span className="text-xs font-mono text-white/40">{(config.imageOptions.imageSize * 100).toFixed(0)}%</span>
           </div>
           <input
             type="range"
             min="0.1"
-            max="1"
+            max="2"
             step="0.05"
             value={config.imageOptions.imageSize}
             onChange={(e) => onChange({
               ...config,
               imageOptions: { ...config.imageOptions, imageSize: Number(e.target.value) }
             })}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            className="w-full h-2 bg-white/30 rounded-lg appearance-none cursor-pointer accent-blue-600"
           />
+          <p className="text-[10px] text-gray-500 italic">Nota: Tamanhos acima de 50% podem dificultar a leitura do QR Code.</p>
+        </div>
+
+        <div className="flex items-center justify-between p-3 glass-card rounded-xl border-white/5">
+          <div className="flex flex-col">
+            <span className="text-sm font-medium text-white/80">Ocultar pontos atrás</span>
+            <span className="text-[10px] text-gray-500">Remove os pontos cobertos pela logo</span>
+          </div>
+          <button
+            onClick={() => onChange({
+              ...config,
+              imageOptions: { ...config.imageOptions, hideBackgroundDots: !config.imageOptions.hideBackgroundDots }
+            })}
+            className={`w-10 h-5 rounded-full transition-all relative ${
+              config.imageOptions.hideBackgroundDots ? 'bg-blue-600' : 'bg-white/10'
+            }`}
+          >
+            <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${
+              config.imageOptions.hideBackgroundDots ? 'left-6' : 'left-1'
+            }`} />
+          </button>
         </div>
 
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-            <Move size={16} className="text-gray-400" />
+          <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+            <Move size={16} className="text-blue-400" />
             Image Margin
           </label>
           <input
@@ -236,8 +279,8 @@ export const ImageOptions: React.FC<ImageOptionsProps> = ({ config, onChange }) 
         </div>
 
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-            <ImageIcon size={16} className="text-gray-400" />
+          <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+            <ImageIcon size={16} className="text-blue-400" />
             Cross Origin
           </label>
           <select

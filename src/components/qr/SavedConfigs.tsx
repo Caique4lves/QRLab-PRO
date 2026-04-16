@@ -33,10 +33,10 @@ export function SavedConfigs({ onApply }: SavedConfigsProps) {
     <div className="mt-6">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-4 glass-card rounded-xl font-semibold text-gray-700 hover:bg-white/50 transition-all"
+        className="w-full flex items-center justify-between px-6 py-4 glass-card rounded-xl font-semibold text-white/80 hover:bg-white/10 transition-all border-white/5"
       >
         <div className="flex items-center gap-2">
-          <History size={20} className="text-blue-600" />
+          <History size={20} className="text-blue-500" />
           <span>Your Saved Styles ({savedQRs.length})</span>
         </div>
         <motion.div
@@ -57,24 +57,24 @@ export function SavedConfigs({ onApply }: SavedConfigsProps) {
           >
             <div className="pt-2 space-y-2">
               {savedQRs.length === 0 ? (
-                <div className="p-8 text-center glass-card rounded-xl border-white/20">
+                <div className="p-8 text-center glass-card rounded-xl border-white/5">
                   <p className="text-sm text-gray-500">No saved styles yet. Create one and save it!</p>
                 </div>
               ) : (
                 savedQRs.map((qr) => (
                   <div
                     key={qr.id}
-                    className="flex items-center justify-between p-4 glass-card rounded-xl hover:bg-white/40 transition-all group"
+                    className="flex items-center justify-between p-4 glass-card rounded-xl hover:bg-white/10 transition-all group border-white/5"
                   >
                     <div className="flex flex-col">
-                      <span className="font-bold text-gray-800">{qr.name}</span>
-                      <span className="text-xs text-gray-400">
+                      <span className="font-bold text-white/90">{qr.name}</span>
+                      <span className="text-xs text-gray-500">
                         {qr.createdAt?.toDate().toLocaleDateString()} {qr.createdAt?.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => onApply(qr.config)}
+                        onClick={() => onApply(JSON.parse(JSON.stringify(qr.config)))}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
                         title="Apply this style"
                       >

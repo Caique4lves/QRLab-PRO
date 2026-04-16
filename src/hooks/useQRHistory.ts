@@ -37,13 +37,13 @@ export function useQRHistory() {
   const saveToHistory = (config: QRConfig, name: string = 'Personalizado') => {
     const newItem: HistoryItem = {
       id: crypto.randomUUID(),
-      config: { ...config },
+      config: JSON.parse(JSON.stringify(config)),
       timestamp: Date.now(),
       name: name || `QR ${new Date().toLocaleDateString()}`
     };
 
-    // Limit to only 1 item to encourage cloud login
-    const newHistory = [newItem]; 
+    // Limit to 10 items for local history
+    const newHistory = [newItem, ...history].slice(0, 10); 
     setHistory(newHistory);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newHistory));
     
@@ -55,11 +55,13 @@ export function useQRHistory() {
     const newHistory = history.filter(item => item.id !== id);
     setHistory(newHistory);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newHistory));
+    window.dispatchEvent(new Event('qr_history_updated'));
   };
 
   const clearHistory = () => {
     setHistory([]);
     localStorage.removeItem(STORAGE_KEY);
+    window.dispatchEvent(new Event('qr_history_updated'));
   };
 
   return {

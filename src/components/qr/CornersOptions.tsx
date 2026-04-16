@@ -15,10 +15,10 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
     <div className="space-y-8">
       {/* Corners Square */}
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Corners Square</h3>
+        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Corners Square</h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-            <Palette size={16} className="text-gray-400" />
+          <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+            <Palette size={16} className="text-blue-400" />
             Color
           </label>
           <div className="flex gap-3 items-center">
@@ -29,7 +29,7 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
                 ...config,
                 cornersSquareOptions: { ...config.cornersSquareOptions, color: e.target.value }
               })}
-              className="w-10 h-10 rounded cursor-pointer border-none p-0"
+              className="w-10 h-10 rounded cursor-pointer border-none p-0 bg-transparent"
             />
             <input
               type="text"
@@ -40,6 +40,16 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
               })}
               className="flex-1 px-4 py-2 glass-input rounded-lg outline-none text-sm"
             />
+            <div className="flex gap-1">
+              <button 
+                onClick={() => onChange({ ...config, cornersSquareOptions: { ...config.cornersSquareOptions, color: '#ffffff' } })}
+                className="w-8 h-8 rounded-lg bg-white border border-white/20 shadow-sm"
+              />
+              <button 
+                onClick={() => onChange({ ...config, cornersSquareOptions: { ...config.cornersSquareOptions, color: '#000000' } })}
+                className="w-8 h-8 rounded-lg bg-black border border-white/20 shadow-sm"
+              />
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-2">
@@ -50,10 +60,10 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
                 ...config,
                 cornersSquareOptions: { ...config.cornersSquareOptions, type: type as any }
               })}
-              className={`px-3 py-2 text-xs rounded-lg border transition-all ${
+              className={`px-3 py-2 text-xs rounded-lg transition-all ${
                 config.cornersSquareOptions.type === type
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20'
-                  : 'bg-white/50 backdrop-blur-sm text-gray-600 border-white/30 hover:bg-white/80'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                  : 'glass-button text-white/60'
               }`}
             >
               {type.charAt(0).toUpperCase() + type.slice(1).replace('-', ' ')}
@@ -64,10 +74,10 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
 
       {/* Corners Dot */}
       <div className="space-y-4">
-        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Corners Dot</h3>
+        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Corners Dot</h3>
         <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-            <Palette size={16} className="text-gray-400" />
+          <label className="flex items-center gap-2 text-sm font-medium text-white/80">
+            <Palette size={16} className="text-blue-400" />
             Color
           </label>
           <div className="flex gap-3 items-center">
@@ -78,7 +88,7 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
                 ...config,
                 cornersDotOptions: { ...config.cornersDotOptions, color: e.target.value }
               })}
-              className="w-10 h-10 rounded cursor-pointer border-none p-0"
+              className="w-10 h-10 rounded cursor-pointer border-none p-0 bg-transparent"
             />
             <input
               type="text"
@@ -89,6 +99,16 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
               })}
               className="flex-1 px-4 py-2 glass-input rounded-lg outline-none text-sm"
             />
+            <div className="flex gap-1">
+              <button 
+                onClick={() => onChange({ ...config, cornersDotOptions: { ...config.cornersDotOptions, color: '#ffffff' } })}
+                className="w-8 h-8 rounded-lg bg-white border border-white/20 shadow-sm"
+              />
+              <button 
+                onClick={() => onChange({ ...config, cornersDotOptions: { ...config.cornersDotOptions, color: '#000000' } })}
+                className="w-8 h-8 rounded-lg bg-black border border-white/20 shadow-sm"
+              />
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2">
@@ -99,10 +119,10 @@ export const CornersOptions: React.FC<CornersOptionsProps> = ({ config, onChange
                 ...config,
                 cornersDotOptions: { ...config.cornersDotOptions, type: type as any }
               })}
-              className={`px-3 py-2 text-xs rounded-lg border transition-all ${
+              className={`px-3 py-2 text-xs rounded-lg transition-all ${
                 config.cornersDotOptions.type === type
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-500/20'
-                  : 'bg-white/50 backdrop-blur-sm text-gray-600 border-white/30 hover:bg-white/80'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                  : 'glass-button text-white/60'
               }`}
             >
               {type.charAt(0).toUpperCase() + type.slice(1).replace('-', ' ')}
